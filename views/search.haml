@@ -1,15 +1,16 @@
-You searched for "#{@search_query}"
-%br
 -#If there's no input posted, just display the search box
 -unless @search_query.nil?
-    -#Create a new imdb search and display the first (up to) 5 matching results
-    JSON output:
-    %br
-    = search_results = FilmBuff.new
-    = search_results.search_for_title(@search_query)
+    -#Create a new imdb search and display the first (up to) 5 matching results (@num_results =5 by default in app.rb)
+    - imdb = FilmBuff.new
+    - imdb_results = imdb.search_for_title(@search_query, limit: @num_results)
+    =imdb_results
     %h2 Search Again?
 What movie are you looking for on IMDB?
 %br
 %form{:action => "/search", :method => "post"}
     %input{:type => "text", :name => "search_query"}
+    %input{:type => "checkbox", :name => "json_only", :id => "json_only"}
+    %label{:for => "json_only"}
+        Only retrieve JSON results for search.
+    %br
     %input{:type => "submit"}

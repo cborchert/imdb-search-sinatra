@@ -26,7 +26,14 @@ end
 
 get '/search/:query' do
     @search_query = params[:query]
-    #num_results = -1 could be used for all results?
+    #num_results any string, or zero would return all the movies
+    @num_results = "all"
+    haml :search
+end
+
+get '/search/:query/' do
+    @search_query = params[:query]
+    #num_results any string, or zero would return all the movies
     @num_results = "all"
     haml :search
 end

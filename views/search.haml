@@ -1,10 +1,38 @@
 -#If there's no input posted, just display the search box
 -unless @search_query.nil?
+    -#convert recieved String for num_results to an integer. All non-numeric text == 0.
+    -@num_results = @num_results.to_i
+
     -#Create a new imdb search and display the first (up to) 5 matching results (@num_results =5 by default in app.rb)
     - imdb = FilmBuff.new
-    - imdb_results = imdb.search_for_title(@search_query, limit: @num_results)
-    =imdb_results
+    - imdb_results = imdb.search_for_title(@search_query)
+
+    -#Show the results
+    -unless imdb_results.length < 1
+        -#the header text
+        %h2
+            -#Text at top will either be 'Top results (of x total)' 'All results'
+            #{(@num_results==0)? 'All' : 'Top'} results for "#{@search_query}"
+            -if @num_results < imdb_results.length && @num_results != 0
+                (of #{imdb_results.length} total)
+        %p Click the title for more information regarding that title
+
+        -#the actual list of titles
+        %ul
+            -if @num_results == 0
+                -@num_results = imdb_results.length
+            -for movie_num in 0..@num_results
+                -unless movie_num >= imdb_results.length
+                    ="<li><a href="">#{imdb_results[movie_num][:title]}</a></li>"
+            -#if not all results are shown, give that option
+            -if imdb_results.length > @num_results
+                %br
+                %a{:href => "/search/#{@search_query}"} Show all results for "#{@search_query}"
+    -else
+        %p No results fitting "#{@search_query}"
+
     %h2 Search Again?
+
 What movie are you looking for on IMDB?
 %br
 %form{:action => "/search", :method => "post"}

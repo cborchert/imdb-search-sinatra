@@ -3,6 +3,5 @@
     - begin
         - imdb_results = imdb.search_for_title(@search_query)
     - rescue FilmBuff::NotFound
-        %h2.error No results fitting "#{@search_query}"
         - imdb_results = Hash.new
     = imdb_results

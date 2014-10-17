@@ -4,6 +4,6 @@ require "rubygems"
 require "bundler/setup"
 require "sinatra"
 require "haml"
-require "app"
+require "./app"
 
 run Sinatra::Application

@@ -47,3 +47,11 @@ get '/search/:query/:num_results' do
     @num_results = params[:num_results]
     haml :search
 end
+
+# filmBuff is not able to secure a connection with imdb through the .look_up_id() method
+# this means that the additional attributes of the films are not available (Tagline, Plot, Runtime, Rating, Genres, etc.)
+#
+#get '/single/:imdb_id' do
+#    @id = params[:imdb_id]
+#    haml :single
+#end

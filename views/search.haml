@@ -3,10 +3,10 @@
     -#convert recieved String for num_results to an integer. All non-numeric text == 0.
     -@num_results = @num_results.to_i
 
-    -#Create a new imdb search and display the first (up to) 5 matching results (@num_results =5 by default in app.rb)
+    -#Create a new imdb object so we can initiate the search
     - imdb = FilmBuff.new
 
-    -#Handle the not found error thrown by filmBuff, assigning imdb_results as an empty hash instead
+    -#Initiate the search and handle the not found error thrown by filmBuff, assigning imdb_results as an empty hash instead
     - begin
         - imdb_results = imdb.search_for_title(@search_query)
     - rescue FilmBuff::NotFound
@@ -29,14 +29,15 @@
                 -@num_results = imdb_results.length
             -for movie_num in 0...@num_results
                 -unless movie_num >= imdb_results.length
-                    ="<li><a href="">#{imdb_results[movie_num][:title]}</a></li>"
+                    %li= "#{imdb_results[movie_num][:title]} (Released: #{imdb_results[movie_num][:release_year]}) <a href='http://www.imdb.com/title/#{imdb_results[movie_num][:imdb_id]}'>View on IMDb</a><br>"
         -#if not all results are shown, give that option
         -if imdb_results.length > @num_results
             %p
                 %a{:href => "/search/#{@search_query}"} Show all results for "#{@search_query}"
             %br
 -else
-    %h2.error You must enter a search term
+    -unless @search_query.nil?
+        %h2.error You must enter a search term
 
 
 What movie are you looking for on IMDB?

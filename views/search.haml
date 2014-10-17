@@ -1,13 +1,19 @@
--#If there's no input posted, just display the search box
--unless @search_query.nil?
+-#Handle the error caused by an empty search string
+-unless @search_query == "" || @search_query.nil?
     -#convert recieved String for num_results to an integer. All non-numeric text == 0.
     -@num_results = @num_results.to_i
 
     -#Create a new imdb search and display the first (up to) 5 matching results (@num_results =5 by default in app.rb)
     - imdb = FilmBuff.new
-    - imdb_results = imdb.search_for_title(@search_query)
 
-    -#Show the results
+    -#Handle the not found error thrown by filmBuff, assigning imdb_results as an empty hash instead
+    - begin
+        - imdb_results = imdb.search_for_title(@search_query)
+    - rescue FilmBuff::NotFound
+        %h2.error No results fitting "#{@search_query}"
+        - imdb_results = Hash.new
+
+    -#Show the results, unless there was an error
     -unless imdb_results.length < 1
         -#the header text
         %h2
@@ -21,17 +27,17 @@
         %ul
             -if @num_results == 0
                 -@num_results = imdb_results.length
-            -for movie_num in 0..@num_results
+            -for movie_num in 0...@num_results
                 -unless movie_num >= imdb_results.length
                     ="<li><a href="">#{imdb_results[movie_num][:title]}</a></li>"
-            -#if not all results are shown, give that option
-            -if imdb_results.length > @num_results
-                %br
+        -#if not all results are shown, give that option
+        -if imdb_results.length > @num_results
+            %p
                 %a{:href => "/search/#{@search_query}"} Show all results for "#{@search_query}"
-    -else
-        %p No results fitting "#{@search_query}"
+            %br
+-else
+    %h2.error You must enter a search term
 
-    %h2 Search Again?
 
 What movie are you looking for on IMDB?
 %br

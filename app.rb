@@ -13,6 +13,10 @@ get '/search' do
     haml :search
 end
 
+get '/search/' do
+    haml :search
+end
+
 post '/search' do
     @search_query = params[:search_query]
     @num_results = 5

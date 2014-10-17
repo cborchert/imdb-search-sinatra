@@ -1,7 +1,8 @@
 #app.rb
 require 'rubygems'
 require 'sinatra'
-require 'filmbluff'
+#I had to manually install filmbuff v.1.0.0 from git. rubygems' most recent version is 0.1.6
+require 'filmbuff'
 
 get '/' do
     haml :search
@@ -18,14 +19,14 @@ post '/search' do
 end
 
 get '/search/:query' do
-    @search_query = params[:search_query]
+    @search_query = params[:query]
     #num_results = -1 could be used for all results?
     @num_results = "all"
     haml :search
 end
 
 get '/search/:query/:num_results' do
-    @search_query = params[:search_query]
+    @search_query = params[:query]
     @num_results = params[:num_results]
     haml :search
 end

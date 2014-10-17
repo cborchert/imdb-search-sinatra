@@ -1,0 +1,12 @@
+
+    -unless search_results.movies.size < 1
+        %h2 Top results from fitting "#{@msg}" (#{search_results.movies.size} total)
+        %p Click the title for more information regarding that title
+        %ul 
+            -for movie_num in 0..4
+                -unless movie_num >= search_results.movies.size
+                    ="<li><a href="">#{search_results.movies[movie_num].title}</a></li>"
+        -if search_results.movies.size > 5
+            %a{:href => "/results/#{@msg}"} Show all results for "#{@msg}"
+    -else
+        %p No results fitting "#{@msg}"

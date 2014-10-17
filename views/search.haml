@@ -1,0 +1,15 @@
+You searched for "#{@search_query}"
+%br
+-#If there's no input posted, just display the search box
+-unless @search_query.nil?
+    -#Create a new imdb search and display the first (up to) 5 matching results
+    JSON output:
+    %br
+    = search_results = FilmBuff.new
+    = search_results.search_for_title(@search_query)
+    %h2 Search Again?
+What movie are you looking for on IMDB?
+%br
+%form{:action => "/search", :method => "post"}
+    %input{:type => "text", :name => "search_query"}
+    %input{:type => "submit"}

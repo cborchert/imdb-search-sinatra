@@ -4,4 +4,4 @@
         - imdb_results = imdb.search_for_title(@search_query)
     - rescue FilmBuff::NotFound
         - imdb_results = Hash.new
-    = imdb_results
+    = imdb_results.to_json

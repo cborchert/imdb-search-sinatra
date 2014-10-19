@@ -5,7 +5,7 @@ require 'filmbuff'
 
 ##########################METHODS####################################
 
-def showResults (search_query, num_results)
+def getResults (search_query, num_results)
     @headerMessage = ""
     @headerClass =""
     @listing = ""
@@ -13,7 +13,7 @@ def showResults (search_query, num_results)
 
     #Handle the error caused by an empty search string
     if search_query == ""
-        showErrorMessage("You must enter a search term")
+        getErrorMessage("You must enter a search term")
 
     #Create a list for the search, unless the search query is somehow nil
     elsif !search_query.nil?
@@ -28,19 +28,21 @@ def showResults (search_query, num_results)
             imdb_results = imdb.search_for_title(search_query)
         rescue FilmBuff::NotFound
             #Rescue the no results error
-            showErrorMessage("No results fitting #{search_query}")
+            getErrorMessage("No results fitting #{search_query}")
             #imdb_results = Hash.new
         rescue NoMethodError
             #Rescue the Hey Jude input error?
-            showErrorMessage("An error occurred")
+            getErrorMessage("An error occurred")
         else
 
             #Show the results, unless there was an error
             unless imdb_results.length < 1
                 #the header text will either be 'Top results (of x total)' 'All results'
-                @headerMessage = ((num_results==0)? "All" : "Top") + " results for &ldquo;#{search_query}&rdquo;"
+                result_string = "results for &ldquo;#{search_query}&rdquo;"
                 if num_results < imdb_results.length && num_results != 0
-                    @headerMessage += " (of #{imdb_results.length} total)"
+                    @headerMessage = "Top " + result_string + " (of #{imdb_results.length} total)"
+                else
+                    @headerMessage = "All " + result_string
                 end
 
                 #Generate the actual list of titles
@@ -68,7 +70,7 @@ def showResults (search_query, num_results)
     end
 end
 
-def showErrorMessage (msg)
+def getErrorMessage (msg)
         @headerMessage = msg
         @headerClass = "error"
 end
@@ -102,17 +104,23 @@ post '/search' do
         jsonResults(params[:search_query])
         haml :JSON
     else
-        showResults(params[:search_query], 5)
+        getResults(params[:search_query], 5)
         haml :search
     end
 end
 
 get '/search/:query/?' do
-    showResults(params[:query], "all")
+    getResults(params[:query], "all")
     haml :search
 end
 
 get '/search/:query/:num_results' do
-    showResults(params[:query], params[:num_results])
+    getResults(params[:query], params[:num_results])
+    haml :search
+end
+
+not_found do
+    @headerMessage = "Page not found."
+    @headerClass = "error"
     haml :search
 end

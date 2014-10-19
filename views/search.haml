@@ -1,44 +1,6 @@
--#Handle the error caused by an empty search string
--unless @search_query == "" || @search_query.nil?
-    -#convert recieved String for num_results to an integer. All non-numeric text == 0.
-    -@num_results = @num_results.to_i
-
-    -#Create a new imdb object so we can initiate the search
-    - imdb = FilmBuff.new
-
-    -#Initiate the search and handle the not found error thrown by filmBuff, assigning imdb_results as an empty hash instead
-    - begin
-        - imdb_results = imdb.search_for_title(@search_query)
-    - rescue FilmBuff::NotFound
-        %h2.error No results fitting "#{@search_query}"
-        - imdb_results = Hash.new
-
-    -#Show the results, unless there was an error
-    -unless imdb_results.length < 1
-        -#the header text
-        %h2
-            -#Text at top will either be 'Top results (of x total)' 'All results'
-            #{(@num_results==0)? 'All' : 'Top'} results for "#{@search_query}"
-            -if @num_results < imdb_results.length && @num_results != 0
-                (of #{imdb_results.length} total)
-        %p Click the title for more information regarding that title
-
-        -#the actual list of titles
-        %ul
-            -if @num_results == 0
-                -@num_results = imdb_results.length
-            -for movie_num in 0...@num_results
-                -unless movie_num >= imdb_results.length
-                    %li= "#{imdb_results[movie_num][:title]} (Released: #{imdb_results[movie_num][:release_year]}) <a href='http://www.imdb.com/title/#{imdb_results[movie_num][:imdb_id]}'>View on IMDb</a><br>"
-        -#if not all results are shown, give that option
-        -if imdb_results.length > @num_results
-            %p
-                %a{:href => "/search/#{@search_query}"} Show all results for "#{@search_query}"
-            %br
--else
-    -unless @search_query.nil?
-        %h2.error You must enter a search term
-
+="<h2 class = '" + "#{@headerClass}"+"'>#{@headerMessage}</h2>" unless @headerMessage == ""
+="#{@listing}" unless @listing == ""
+="#{@footerMessage}" unless @listing == ""
 
 What movie are you looking for on IMDB?
 %br

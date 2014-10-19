@@ -113,7 +113,6 @@ get '/search/:query/?' do
 end
 
 get '/search/:query/:num_results' do
-    @search_query = params[:query]
-    showResults(params[:search_query], params[:num_results])
+    showResults(params[:query], params[:num_results])
     haml :search
 end

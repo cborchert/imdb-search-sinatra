@@ -1,8 +1,10 @@
+-#Print the results and messages, but only if they exist and a search has been conducted
 ="<h2 class = '" + "#{@headerClass}"+"'>#{@headerMessage}</h2>" unless @headerMessage == "" || @headerMessage.nil?
 ="#{@listing}" unless @listing == "" || @listing.nil?
 ="#{@footerMessage}" unless @footerMessage == "" || @footerMessage.nil?
 ="<h2>Search Again?</h2>" unless @headerMessage == "" || @headerMessage.nil?
 
+-#Get user input for a new search
 What movie are you looking for on IMDB?
 %br
 %form{:action => "/search", :method => "post"}

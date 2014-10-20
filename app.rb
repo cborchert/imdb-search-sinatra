@@ -5,6 +5,7 @@ require 'filmbuff'
 
 ##########################METHODS####################################
 
+#Takes a search string and modifies the variables accessed by search.haml
 def getResults (search_query, num_results)
     @headerMessage = ""
     @headerClass =""
@@ -31,13 +32,13 @@ def getResults (search_query, num_results)
             getErrorMessage("No results fitting #{search_query}")
             #imdb_results = Hash.new
         rescue NoMethodError
-            #Rescue the Hey Jude input error?
+            #Rescue the Hey Jude input error (Why does this even happen?? It's internal to filmBuff)
             getErrorMessage("An error occurred")
         else
 
             #Show the results, unless there was an error
             unless imdb_results.length < 1
-                #the header text will either be 'Top results (of x total)' 'All results'
+                #the header text will either be 'Top results for x (of y total)' 'All results for x'
                 result_string = "results for &ldquo;#{search_query}&rdquo;"
                 if num_results < imdb_results.length && num_results != 0
                     @headerMessage = "Top " + result_string + " (of #{imdb_results.length} total)"
@@ -75,6 +76,7 @@ def getErrorMessage (msg)
         @headerClass = "error"
 end
 
+#stores json results into the variable accessed by json.haml
 def jsonResults(search_query)
     imdb_results = Hash.new
     unless search_query == "" || search_query.nil?

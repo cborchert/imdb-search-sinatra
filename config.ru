@@ -1,5 +1,3 @@
-#config.ru
-
 require "bundler/setup"
 require "./app"
 
